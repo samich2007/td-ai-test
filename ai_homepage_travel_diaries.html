@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Travel Diaries AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<style>
+    body { font-family: 'Poppins', sans-serif; }
+</style>
+</head>
+<body class="bg-gray-50">
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4">Vraag het aan onze reizigers</h2>
+    <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Krijg antwoord vanuit echte reiservaringen. Stel je vraag en onze AI zoekt het antwoord in duizenden reisdagboeken.</p>
+    <div class="max-w-2xl mx-auto bg-white p-4 rounded-full shadow-lg flex items-center" id="form-container">
+      <span class="material-icons text-gray-400 pl-4">search</span>
+      <input id="question" class="w-full py-3 px-4 text-gray-700 focus:outline-none bg-transparent" placeholder="bv. 'Wat zijn de beste restaurants in Rome?'" type="text"/>
+      <button onclick="askAI()" class="bg-orange-500 text-white px-8 py-3 rounded-full hover:bg-orange-600 font-semibold">Zoek</button>
+    </div>
+    <div id="answer" class="mt-6 text-left max-w-2xl mx-auto text-lg text-gray-800 bg-gray-100 p-6 rounded-xl shadow-inner hidden"></div>
+  </div>
+</section>
+
+<script>
+  async function askAI() {
+    const vraag = document.getElementById("question").value;
+    const antwoordBox = document.getElementById("answer");
+    antwoordBox.classList.remove("hidden");
+    antwoordBox.textContent = "Even geduld...";
+
+    const response = await fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vraag })
+    });
+
+    const data = await response.json();
+    antwoordBox.textContent = data.antwoord || "Geen antwoord gevonden.";
+  }
+</script>
+</body>
+</html>
